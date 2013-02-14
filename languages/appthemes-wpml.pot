@@ -1,0 +1,36 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: AppThemes WPML Bridge 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-02-14 16:07+0100\n"
+"PO-Revision-Date: 2013-02-14 16:07+0100\n"
+"Last-Translator: AppThemes\n"
+"Language-Team: AppThemes\n"
+"Language: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_nx:1,2;_x:1,2c;_ex:1,2c;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:1,2,3c\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../wpml.php:55
+msgid "AppThemes WPML Bridge could not run."
+msgstr ""
+
+#: ../wpml.php:58
+msgid "AppThemes WPML Bridge does not support the current theme."
+msgstr ""
+
+#: ../wpml.php:61
+msgid "AppThemes WPML Bridge require WPML Multilingual CMS plugin to work."
+msgstr ""
+
+#: ../wpml.php:64
+msgid "AppThemes WPML Bridge require WPML String Translation plugin to work."
+msgstr ""
