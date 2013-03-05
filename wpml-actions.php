@@ -30,3 +30,12 @@ function app_wpml_cp_formbuilder_field( $result, $post ) {
 add_filter( 'cp_formbuilder_field', 'app_wpml_cp_formbuilder_field', 10, 2 );
 
 
+/**
+ * ClassiPress: hook into cp_display_message()
+ */
+function app_wpml_cp_display_message( $message, $tag ) {
+	return icl_translate( APP_TD, 'message_' . $tag, $message );
+}
+add_filter( 'cp_display_message', 'app_wpml_cp_display_message', 10, 2 );
+
+
