@@ -36,15 +36,22 @@ function app_wpml_setup() {
 		return;
 	}
 
-	// Check for existence of AppThemes Products
+	require_once dirname( __FILE__ ) . '/wpml-actions.php';
+}
+add_action( 'plugins_loaded', 'app_wpml_setup' );
+
+
+/**
+ * Check for existence of AppThemes Products.
+ */
+function app_wpml_check_appthemes() {
+
 	if ( ! function_exists( 'appthemes_init' ) ) {
 		add_action( 'admin_notices', 'app_wpml_display_warning' );
 		return;
 	}
-
-	require_once dirname( __FILE__ ) . '/wpml-actions.php';
 }
-add_action( 'init', 'app_wpml_setup' );
+add_action( 'init', 'app_wpml_check_appthemes' );
 
 
 /**
