@@ -11,6 +11,20 @@ add_filter( 'appthemes_page_id_for_template', 'app_wpml_appthemes_page_id_for_te
 
 
 /**
+ * ClassiPress: hook into cp_add_new_listing(), set proper language for new listing
+ */
+function app_wpml_cp_add_new_listing( $post_id ) {
+	global $sitepress;
+
+	if ( $sitepress->get_current_language() == $sitepress->get_default_language() )
+		return;
+
+	$post_type = get_post_type( $post_id );
+	$sitepress->set_element_language_details( $post_id, 'post_' . $post_type, null, $sitepress->get_current_language() );
+}
+add_action( 'cp_action_add_new_listing', 'app_wpml_cp_add_new_listing' );
+
+/**
  * ClassiPress: hook into cp_get_ad_details()
  */
 function app_wpml_cp_ad_details_field( $result, $post, $location ) {
