@@ -21,13 +21,14 @@ add_filter( 'cp_ad_details_field', 'app_wpml_cp_ad_details_field', 10, 3 );
 
 
 /**
- * ClassiPress: hook into cp_formbuilder()
+ * ClassiPress: hook into cp_formbuilder(), cp_formbuilder_review()
  */
-function app_wpml_cp_formbuilder_field( $result, $post ) {
+function app_wpml_cp_formbuilder_field( $result ) {
 	$result->field_label = icl_translate( APP_TD, 'label_' . $result->field_label, $result->field_label );
 	return $result;
 }
-add_filter( 'cp_formbuilder_field', 'app_wpml_cp_formbuilder_field', 10, 2 );
+add_filter( 'cp_formbuilder_field', 'app_wpml_cp_formbuilder_field' );
+add_filter( 'cp_formbuilder_review_field', 'app_wpml_cp_formbuilder_field' );
 
 
 /**
