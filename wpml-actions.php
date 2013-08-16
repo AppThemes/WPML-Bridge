@@ -209,7 +209,7 @@ add_action( 'admin_init', 'app_wpml_cp_form_layouts_show_all_categories' );
 
 
 /**
- * ClassiPress: language selector (for frontend edit-ad page)
+ * ClassiPress: language selector for frontend Edit Ad page
  */
 function app_wpml_cp_ls( $languages ) {
 	global $sitepress, $post;
@@ -224,9 +224,11 @@ function app_wpml_cp_ls( $languages ) {
 		foreach ( $translations as $code => $translation ) {
 			if ( $code != $lang_code ) {
 				$translated_aid = $translation->element_id;
-				$edit_page = $sitepress->language_url( $code ) . 'edit-item/';
+				$edit_page = $sitepress->convert_url( get_permalink( CP_Edit_Item::get_id() ), $code );
 				$url = add_query_arg( 'aid', $translated_aid, $edit_page );
 				$languages[ $code ]['url'] = $url;
+			} else {
+				$languages[ $code ]['url'] = add_query_arg( 'aid', $aid );
 			}
 		}
 	}
