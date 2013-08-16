@@ -223,18 +223,3 @@ function show_all_categories_in_form_properties() {
 add_action( 'init', 'show_all_categories_in_form_properties' );
 
 
-/**
- * ClassiPress
- * Note: We not have an 'cp_custom_field_values' filter ?!
- */
-function app_wpml_custom_field_values( $options, $field_name ) {
-	$translated_options = array();
-	foreach ( $options as $option ) {
-		$translated_options[] = icl_t( APP_TD, 'value_' . $field_name, $option );
-	}
-
-	return $translated_options;
-}
-add_filter( 'cp_custom_field_values', 'app_wpml_custom_field_values' );
-
-
