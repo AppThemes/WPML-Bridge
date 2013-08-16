@@ -32,7 +32,7 @@ add_action( 'save_post', 'app_wpml_create_order', 20, 2 ); // after WPML's save_
 function app_wpml_appthemes_order_return_url( $url ) {
 	global $sitepress;
 
-	return $sitepress->convert_url( $url );
+	return str_replace( '&amp;', '&', $sitepress->convert_url( $url ) );
 }
 add_filter( 'appthemes_order_return_url', 'app_wpml_appthemes_order_return_url' );
 
