@@ -170,6 +170,22 @@ add_action( 'cp_custom_fields', 'app_wpml_cp_custom_fields', 10, 2 );
 
 
 /**
+ * ClassiPress: show categories in all languages for form layouts
+ * This way one can define a single form for all languages, with custom
+ * field labels translated through string translation
+ */
+function app_wpml_cp_form_layouts_show_all_categories() {
+	if ( isset( $_GET['page'] ) && isset( $_GET['action'] ) && ! isset( $_GET['lang'] ) ) {
+		if ( ( $_GET['page'] == 'layouts' ) && in_array( $_GET['action'], array( 'editform', 'addform' ) ) ) {
+			$url = add_query_arg( 'lang', 'all' );
+			wp_redirect( $url );
+		}
+	}
+}
+add_action( 'admin_init', 'app_wpml_cp_form_layouts_show_all_categories' );
+
+
+/**
  * ClassiPress: language selector (for frontend edit-ad and order pages)
  * Note: Needs testing
  */
@@ -204,21 +220,5 @@ function app_wpml_ls( $languages ) {
 	return $languages;
 }
 add_filter( 'icl_ls_languages', 'app_wpml_ls' );
-
-
-/**
- * ClassiPress: show categories in all languages for form layouts
- * This way one can define a single form for all languages, with custom
- * field labels translated through string translation
- *
- * Note: Need testing, and refine it to admin only 
- */
-function show_all_categories_in_form_properties() {
-	if ( isset( $_GET['action'] ) && in_array( $_GET['action'], array( 'editform', 'addform' ) ) && ( ! isset( $_GET['lang'] ) ) ) {
-		$url = add_query_arg( 'lang', 'all' );
-		wp_redirect( $url );
-	}
-}
-add_action( 'init', 'show_all_categories_in_form_properties' );
 
 
