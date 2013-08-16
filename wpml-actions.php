@@ -38,6 +38,16 @@ add_filter( 'appthemes_order_return_url', 'app_wpml_appthemes_order_return_url' 
 
 
 /**
+ * Payments: Removes language metabox for orders
+ */
+function app_wpml_orders_remove_language_metabox() {
+
+	remove_meta_box( 'icl_div', 'transaction', 'side' );
+}
+add_action( 'admin_head', 'app_wpml_orders_remove_language_metabox', 11 );
+
+
+/**
  * ClassiPress: hook into cp_add_new_listing(), set proper language for new listing
  */
 function app_wpml_cp_add_new_listing( $post_id ) {
