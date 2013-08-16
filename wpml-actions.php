@@ -48,19 +48,23 @@ add_action( 'admin_head', 'app_wpml_orders_remove_language_metabox', 11 );
 
 
 /**
- * Payments: language selector (for frontend order pages)
+ * Payments: language selector for frontend order pages
+ * Orders are available only in one language, remove others from language selector
  */
 function app_wpml_orders_ls( $languages ) {
 	global $sitepress, $post;
 
 	$lang_code = $sitepress->get_current_language();
 
-	if ( is_singular() && empty( $languages ) && get_post_type() == 'transaction' ) {
+	if ( is_singular() && get_post_type() == 'transaction' ) {
 		remove_filter( 'icl_ls_languages', 'app_wpml_orders_ls' );
 		$languages = $sitepress->get_ls_languages( array( 'skip_missing' => false ) );
 		$url = get_permalink( $post->ID );
-		foreach ( $languages as $code => &$lang ) {
-			$lang['url'] = $sitepress->convert_url( $url, $code );
+		foreach ( $languages as $code => $lang ) {
+			if ( $code == $lang_code )
+				$languages[ $code ]['url'] = $sitepress->convert_url( $url, $code );
+			else
+				unset( $languages[ $code ] );
 		}
 		add_filter( 'icl_ls_languages', 'app_wpml_orders_ls' );
 	}
