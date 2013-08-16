@@ -197,17 +197,6 @@ add_filter( 'icl_ls_languages', 'app_wpml_ls' );
 
 
 /**
- * WP: filter registration url
- * Note: We use in framework new WP filter for this purpose ?!
- */
-function app_wpml_register( $link ) {
-	$url = appthemes_get_registration_url();
-	return preg_replace( '/href=".*"/s', 'href="' . $url . '"', $link );
-}
-add_filter( 'register', 'app_wpml_register' );
-
-
-/**
  * ClassiPress: show categories in all languages for form layouts
  * This way one can define a single form for all languages, with custom
  * field labels translated through string translation
