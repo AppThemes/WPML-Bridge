@@ -48,6 +48,29 @@ add_action( 'admin_head', 'app_wpml_orders_remove_language_metabox', 11 );
 
 
 /**
+ * Payments: language selector (for frontend order pages)
+ */
+function app_wpml_orders_ls( $languages ) {
+	global $sitepress, $post;
+
+	$lang_code = $sitepress->get_current_language();
+
+	if ( is_singular() && empty( $languages ) && get_post_type() == 'transaction' ) {
+		remove_filter( 'icl_ls_languages', 'app_wpml_orders_ls' );
+		$languages = $sitepress->get_ls_languages( array( 'skip_missing' => false ) );
+		$url = get_permalink( $post->ID );
+		foreach ( $languages as $code => &$lang ) {
+			$lang['url'] = $sitepress->convert_url( $url, $code );
+		}
+		add_filter( 'icl_ls_languages', 'app_wpml_orders_ls' );
+	}
+
+	return $languages;
+}
+add_filter( 'icl_ls_languages', 'app_wpml_orders_ls' );
+
+
+/**
  * ClassiPress: hook into cp_add_new_listing(), set proper language for new listing
  */
 function app_wpml_cp_add_new_listing( $post_id ) {
@@ -186,15 +209,14 @@ add_action( 'admin_init', 'app_wpml_cp_form_layouts_show_all_categories' );
 
 
 /**
- * ClassiPress: language selector (for frontend edit-ad and order pages)
- * Note: Needs testing
+ * ClassiPress: language selector (for frontend edit-ad page)
  */
-function app_wpml_ls( $languages ) {
+function app_wpml_cp_ls( $languages ) {
 	global $sitepress, $post;
+
 	$lang_code = $sitepress->get_current_language();
 
-	// CP: Edit ad
-	if ( isset( $_GET['aid'] ) ) {
+	if ( is_page_template( 'tpl-edit-item.php' ) && isset( $_GET['aid'] ) ) {
 		$aid = $_GET['aid'];
 		$trid = $sitepress->get_element_trid( $aid, 'post_ad_listing' );
 		$translations = $sitepress->get_element_translations( $trid, 'post_ad_listing' );
@@ -207,18 +229,10 @@ function app_wpml_ls( $languages ) {
 				$languages[ $code ]['url'] = $url;
 			}
 		}
-	// Orders
-	} else if ( is_singular() && empty( $languages ) && get_post_type() == 'transaction' ) {
-		remove_filter( 'icl_ls_languages', 'app_wpml_ls' );
-		$languages = $sitepress->get_ls_languages( array( 'skip_missing' => false ) );
-		$url = get_permalink( $post->ID );
-		foreach ( $languages as $code => &$lang ) {
-			$lang['url'] = $sitepress->convert_url( $url, $code );
-		}
-		add_filter( 'icl_ls_languages', 'app_wpml_ls' );
 	}
+
 	return $languages;
 }
-add_filter( 'icl_ls_languages', 'app_wpml_ls' );
+add_filter( 'icl_ls_languages', 'app_wpml_cp_ls' );
 
 
