@@ -242,3 +242,19 @@ function app_wpml_cp_ls( $languages ) {
 add_filter( 'icl_ls_languages', 'app_wpml_cp_ls' );
 
 
+/**
+ * ClassiPress: Removes WPML sticky posts filtering which isn't working well with CP
+ */
+function app_wpml_cp_sticky_posts() {
+	global $sitepress, $pagenow;
+
+	if ( ( $pagenow == 'edit.php' ) && ! isset( $_GET['post_type'] ) )
+		return;
+
+	remove_filter( 'option_sticky_posts', array( $sitepress, 'option_sticky_posts' ) );
+}
+add_action( 'init', 'app_wpml_cp_sticky_posts', 11 );
+add_action( 'admin_init', 'app_wpml_cp_sticky_posts', 11 );
+add_action( 'admin_head', 'app_wpml_cp_sticky_posts', 11 );
+
+
