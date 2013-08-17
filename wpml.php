@@ -5,7 +5,7 @@ Description: Creates bridge between AppThemes Products and WPML plugin.
 
 AppThemes ID: appthemes-wpml
 
-Version: 3.0
+Version: 1.1
 Author: AppThemes
 Author URI: http://appthemes.com
 Text Domain: appthemes-wpml
@@ -15,7 +15,7 @@ Text Domain: appthemes-wpml
 /**
  * Plugin version and textdomain constants.
  */
-define( 'APP_WPML_VERSION', '3.0' );
+define( 'APP_WPML_VERSION', '1.1' );
 define( 'APP_WPML_TD', 'appthemes-wpml' );
 
 
