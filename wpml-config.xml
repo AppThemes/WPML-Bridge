@@ -1,9 +1,10 @@
 <wpml-config>
-    <custom-types>
-        <custom-type translate="1">ad_listing</custom-type>
-    </custom-types>
-    <taxonomies>
-        <taxonomy translate="1">ad_cat</taxonomy>
+	<custom-types>
+		<custom-type translate="1">ad_listing</custom-type>
+		<custom-type translate="1">transaction</custom-type>
+	</custom-types>
+	<taxonomies>
+		<taxonomy translate="1">ad_cat</taxonomy>
 		<taxonomy translate="1">ad_tag</taxonomy>
-    </taxonomies>
+	</taxonomies>
 </wpml-config>
