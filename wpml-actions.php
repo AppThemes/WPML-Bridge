@@ -93,11 +93,30 @@ add_action( 'cp_action_add_new_listing', 'app_wpml_cp_add_new_listing' );
  * ClassiPress: hook into cp_get_ad_details()
  */
 function app_wpml_cp_ad_details_field( $result, $post, $location ) {
-	$result->field_label = icl_translate( APP_TD, 'label_' . $result->field_name, $result->field_label );
+	add_filter( 'cp_ad_details_' . $result->field_name, 'app_wpml_cp_ad_details_concrete_field', 10, 2 );
 	return $result;
 }
 add_filter( 'cp_ad_details_field', 'app_wpml_cp_ad_details_field', 10, 3 );
 
+function app_wpml_cp_ad_details_concrete_field ( $args, $field ) {
+
+	$args['label'] = icl_translate( APP_TD, 'label_' . $field->field_name, $field->field_label );
+
+	$values = (array) $args['value'];
+
+	if ( 'checkbox' === $field->field_type ) {
+		$values = explode( ',', $value );
+		$values = array_map( 'trim', $value );
+	}
+
+	foreach ( $values as &$value ) {
+		$value = icl_translate( APP_TD, "value_{$field->field_name} {$value}", $value );
+	}
+
+	$args['value'] = implode( ", ", $values );
+
+	return $args;
+}
 
 /**
  * ClassiPress: hook into cp_formbuilder(), cp_formbuilder_review()
