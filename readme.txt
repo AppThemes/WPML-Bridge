@@ -3,9 +3,9 @@ Contributors: appthemes
 Tags: appthemes, wpml, integration, language, localization, multilingual, classipress
 Requires at least: 3.4
 Tested up to: 3.6
-Stable tag: 1.1
+Stable tag: 1.2
 
-This plugin adds additional WPML compatibility for AppThemes themes. 
+This plugin adds additional WPML compatibility for AppThemes themes.
 
 == Description ==
 
@@ -42,6 +42,10 @@ Report it with details on [AppThemes support forum](http://forums.appthemes.com/
 
 
 == Changelog ==
+
+= 1.2 =
+
+* Make all fields labels and values translatable on the single ClassiPress Ad page
 
 = 1.1 =
 
