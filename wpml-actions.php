@@ -50,6 +50,10 @@ add_action( 'admin_head', 'app_wpml_orders_remove_language_metabox', 11 );
 /**
  * Payments: language selector for frontend order pages
  * Orders are available only in one language, remove others from language selector
+ *
+ * @param array $languages
+ *
+ * @return array
  */
 function app_wpml_orders_ls( $languages ) {
 	global $sitepress, $post;
@@ -61,10 +65,11 @@ function app_wpml_orders_ls( $languages ) {
 		$languages = $sitepress->get_ls_languages( array( 'skip_missing' => false ) );
 		$url = get_permalink( $post->ID );
 		foreach ( $languages as $code => $lang ) {
-			if ( $code == $lang_code )
+			if ( $code == $lang_code ) {
 				$languages[ $code ]['url'] = $sitepress->convert_url( $url, $code );
-			else
+			} else {
 				unset( $languages[ $code ] );
+			}
 		}
 		add_filter( 'icl_ls_languages', 'app_wpml_orders_ls' );
 	}
@@ -76,12 +81,17 @@ add_filter( 'icl_ls_languages', 'app_wpml_orders_ls' );
 
 /**
  * ClassiPress: hook into cp_add_new_listing(), set proper language for new listing
+ *
+ * @param int $post_id
+ *
+ * @return void
  */
 function app_wpml_cp_add_new_listing( $post_id ) {
 	global $sitepress;
 
-	if ( $sitepress->get_current_language() == $sitepress->get_default_language() )
+	if ( $sitepress->get_current_language() == $sitepress->get_default_language() ) {
 		return;
+	}
 
 	$post_type = get_post_type( $post_id );
 	$sitepress->set_element_language_details( $post_id, 'post_' . $post_type, null, $sitepress->get_current_language() );
@@ -91,6 +101,12 @@ add_action( 'cp_action_add_new_listing', 'app_wpml_cp_add_new_listing' );
 
 /**
  * ClassiPress: hook into cp_get_ad_details()
+ *
+ * @param object $result
+ * @param object $post
+ * @param string $location
+ *
+ * @return object
  */
 function app_wpml_cp_ad_details_field( $result, $post, $location ) {
 	add_filter( 'cp_ad_details_' . $result->field_name, 'app_wpml_cp_ad_details_concrete_field', 10, 2 );
@@ -98,15 +114,26 @@ function app_wpml_cp_ad_details_field( $result, $post, $location ) {
 }
 add_filter( 'cp_ad_details_field', 'app_wpml_cp_ad_details_field', 10, 3 );
 
-function app_wpml_cp_ad_details_concrete_field ( $args, $field ) {
+
+/**
+ * @param array $args
+ * @param object $result
+ *
+ * @return array
+ */
+function app_wpml_cp_ad_details_concrete_field( $args, $field ) {
 
 	$args['label'] = icl_translate( APP_TD, 'label_' . $field->field_name, $field->field_label );
 
 	$values = (array) $args['value'];
 
 	if ( 'checkbox' === $field->field_type ) {
-		$values = explode( ',', $value );
-		$values = array_map( 'trim', $value );
+		if ( function_exists( 'cp_explode' ) ) {
+			$values = cp_explode( ',', $values );
+		} else {
+			$values = explode( ',', $values );
+		}
+		$values = array_map( 'trim', $values );
 	}
 
 	foreach ( $values as &$value ) {
@@ -118,17 +145,27 @@ function app_wpml_cp_ad_details_concrete_field ( $args, $field ) {
 	return $args;
 }
 
+
 /**
  * ClassiPress: hook into cp_formbuilder(), cp_formbuilder_review()
+ *
+ * @param object $result
+ *
+ * @return object
  */
 function app_wpml_cp_formbuilder_field( $result ) {
 	$result->field_label = icl_translate( APP_TD, 'label_' . $result->field_name, $result->field_label );
 
-	if ( ! empty( $result->field_tooltip ) )
+	if ( ! empty( $result->field_tooltip ) ) {
 		$result->field_tooltip = icl_translate( APP_TD, 'tooltip_' . $result->field_name, $result->field_tooltip );
+	}
 
 	if ( ! empty( $result->field_values ) ) {
-		$options = explode( ',', $result->field_values );
+		if ( function_exists( 'cp_explode' ) ) {
+			$options = cp_explode( ',', $result->field_values );
+		} else {
+			$options = explode( ',', $result->field_values );
+		}
 		$new_options = array();
 		foreach ( $options as $option ) {
 			$new_options[] = icl_t( APP_TD, 'value_' . $result->field_name . ' ' . trim( $option ), $option );
@@ -145,10 +182,16 @@ add_filter( 'cp_formbuilder_review_field', 'app_wpml_cp_formbuilder_field' );
 
 /**
  * ClassiPress: hook into cp_package_field filter
+ *
+ * @param object $result
+ * @param string $type
+ *
+ * @return object
  */
 function app_wpml_cp_package_field( $result, $type ) {
 	$result->pack_name = icl_translate( APP_TD, 'pack_name_' . $result->pack_id, $result->pack_name );
 	$result->pack_desc = icl_translate( APP_TD, 'pack_desc_' . $result->pack_id, $result->pack_desc );
+
 	return $result;
 }
 add_filter( 'cp_package_field', 'app_wpml_cp_package_field', 10, 2 );
@@ -156,6 +199,11 @@ add_filter( 'cp_package_field', 'app_wpml_cp_package_field', 10, 2 );
 
 /**
  * ClassiPress: hook into get_pack()
+ *
+ * @param object $package
+ * @param int $pack_id
+ *
+ * @return object
  */
 function app_wpml_cp_get_package( $package, $pack_id ) {
 	if ( ! empty( $package ) ) {
@@ -169,6 +217,11 @@ add_filter( 'cp_get_package', 'app_wpml_cp_get_package', 10, 2 );
 
 /**
  * ClassiPress: hook into cp_display_message()
+ *
+ * @param string $message
+ * @param string $tag
+ *
+ * @return string
  */
 function app_wpml_cp_display_message( $message, $tag ) {
 	return icl_translate( APP_TD, 'message_' . $tag, $message );
@@ -178,6 +231,11 @@ add_filter( 'cp_display_message', 'app_wpml_cp_display_message', 10, 2 );
 
 /**
  * ClassiPress: hook into cp_custom_fields(), (un)registers strings immediately on maintaining custom fields
+ *
+ * @param string $action
+ * @param int $field_id
+ *
+ * @return void
  */
 function app_wpml_cp_custom_fields( $action, $field_id ) {
 	global $wpdb;
@@ -191,7 +249,13 @@ function app_wpml_cp_custom_fields( $action, $field_id ) {
 			icl_register_string( APP_TD, 'label_' . $field->field_name, $field->field_label );
 			icl_register_string( APP_TD, 'tooltip_' . $field->field_name, $field->field_tooltip );
 			if ( ! empty( $field->field_values ) ) {
-				$options = array_map( 'trim', explode( ',', $field->field_values ) );
+				if ( function_exists( 'cp_explode' ) ) {
+					$options = array_map( 'trim', cp_explode( ',', $field->field_values ) );
+				} else {
+					$options = array_map( 'trim', explode( ',', $field->field_values ) );
+				}
+				$options_escaped = array_map( 'esc_attr', $options );
+				$options = array_merge( $options, $options_escaped );
 				foreach ( $options as $option ) {
 					icl_register_string( APP_TD, 'value_' . $field->field_name . ' ' . $option, $option );
 				}
@@ -201,7 +265,13 @@ function app_wpml_cp_custom_fields( $action, $field_id ) {
 			icl_unregister_string( APP_TD, 'label_' . $field->field_name, $field->field_label );
 			icl_unregister_string( APP_TD, 'tooltip_' . $field->field_name, $field->field_tooltip );
 			if ( ! empty( $field->field_values ) ) {
-				$options = array_map( 'trim', explode( ',', $field->field_values ) );
+				if ( function_exists( 'cp_explode' ) ) {
+					$options = array_map( 'trim', cp_explode( ',', $field->field_values ) );
+				} else {
+					$options = array_map( 'trim', explode( ',', $field->field_values ) );
+				}
+				$options_escaped = array_map( 'esc_attr', $options );
+				$options = array_merge( $options, $options_escaped );
 				foreach ( $options as $option ) {
 					icl_unregister_string( APP_TD, 'value_' . $field->field_name . ' ' . $option, $option );
 				}
@@ -233,6 +303,10 @@ add_action( 'admin_init', 'app_wpml_cp_form_layouts_show_all_categories' );
 
 /**
  * ClassiPress: language selector for frontend Edit Ad page
+ *
+ * @param array $languages
+ *
+ * @return array
  */
 function app_wpml_cp_ls( $languages ) {
 	global $sitepress, $post;
@@ -267,8 +341,9 @@ add_filter( 'icl_ls_languages', 'app_wpml_cp_ls' );
 function app_wpml_cp_sticky_posts() {
 	global $sitepress, $pagenow;
 
-	if ( ( $pagenow == 'edit.php' ) && ! isset( $_GET['post_type'] ) )
+	if ( ( $pagenow == 'edit.php' ) && ! isset( $_GET['post_type'] ) ) {
 		return;
+	}
 
 	remove_filter( 'option_sticky_posts', array( $sitepress, 'option_sticky_posts' ) );
 }
