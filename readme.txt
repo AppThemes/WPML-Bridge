@@ -1,9 +1,9 @@
 === AppThemes WPML Bridge ===
 Contributors: appthemes
 Tags: appthemes, wpml, integration, language, localization, multilingual, classipress
-Requires at least: 3.4
-Tested up to: 3.6
-Stable tag: 1.2
+Requires at least: 4.0
+Tested up to: 4.6.1
+Stable tag: 1.3
 
 This plugin adds additional WPML compatibility for AppThemes themes.
 
@@ -42,6 +42,13 @@ Report it with details on [AppThemes support forum](http://forums.appthemes.com/
 
 
 == Changelog ==
+
+= 1.3 =
+
+* Use new function cp_explode() to properly handle checkbox values
+* Register in WPML also escaped checkbox values
+* Corrected loading plugin textdomain
+* Fix typo in variable name
 
 = 1.2 =
 
