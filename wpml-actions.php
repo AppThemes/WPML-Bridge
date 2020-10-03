@@ -171,7 +171,7 @@ function app_wpml_cp_formbuilder_field( $result ) {
 			$new_options[] = icl_t( APP_TD, 'value_' . $result->field_name . ' ' . trim( $option ), $option );
 		}
 
-		$result->field_values = implode( $new_options, ',' );
+		$result->field_values = implode( ',', $new_options );
 	}
 
 	return $result;
